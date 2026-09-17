@@ -11,6 +11,12 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
+  const existing = await prisma.user.count();
+  if (existing > 0) {
+    console.log("Seed ignorado: o banco já tem usuários.");
+    return;
+  }
+
   await prisma.notification.deleteMany();
   await prisma.activity.deleteMany();
   await prisma.note.deleteMany();
