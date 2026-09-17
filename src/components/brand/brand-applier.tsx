@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
 import { hexToHsl } from "@/lib/utils";
-import { themeToNextTheme, type WorkspaceBrand } from "@/lib/branding";
+import { themeToNextTheme, USER_THEME_STORAGE_KEY, type WorkspaceBrand } from "@/lib/branding";
 
 export function BrandApplier({ brand }: { brand: WorkspaceBrand }) {
   const { setTheme } = useTheme();
@@ -14,7 +14,11 @@ export function BrandApplier({ brand }: { brand: WorkspaceBrand }) {
     if (brand.secondaryColor) {
       root.style.setProperty("--secondary", hexToHsl(brand.secondaryColor));
     }
-    setTheme(themeToNextTheme(brand.theme));
+
+    const stored = window.localStorage.getItem(USER_THEME_STORAGE_KEY);
+    if (stored !== "light" && stored !== "dark" && stored !== "system") {
+      setTheme(themeToNextTheme(brand.theme));
+    }
 
     const favicon = brand.faviconUrl || "/favicon.svg";
     let link = document.querySelector<HTMLLinkElement>("link[rel='icon']");

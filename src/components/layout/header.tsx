@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { logoutAction } from "@/actions/auth";
@@ -38,7 +39,12 @@ export function Header({
   user: SessionUser;
   notifications: NotificationItem[];
 }) {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur print:hidden lg:px-8">
@@ -58,10 +64,12 @@ export function Header({
       <div className="ml-auto flex items-center gap-2">
         <NotificationsBell items={notifications} />
         <Button
+          type="button"
           variant="ghost"
           size="icon"
           aria-label="Alternar tema"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          disabled={!mounted}
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
         >
           <Sun className="h-4 w-4 dark:hidden" />
           <Moon className="hidden h-4 w-4 dark:block" />
@@ -81,12 +89,12 @@ export function Header({
             <DropdownMenuItem asChild>
               <Link href="/account">Minha conta</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <form action={logoutAction}>
-                <button type="submit" className="w-full text-left">
-                  Sair
-                </button>
-              </form>
+            <DropdownMenuItem
+              onSelect={() => {
+                void logoutAction();
+              }}
+            >
+              Sair
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

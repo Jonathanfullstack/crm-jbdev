@@ -37,3 +37,5 @@ export function themeToNextTheme(theme: WorkspaceBrand["theme"]) {
   if (theme === "DARK") return "dark";
   return "system";
 }
+
+export const USER_THEME_STORAGE_KEY = "crm-theme";
