@@ -7,7 +7,7 @@ import { requireSessionUser } from "@/lib/auth/session";
 import { proposalSchema, proposalStatusSchema } from "@/lib/validations/opportunity";
 import { emitEvent } from "@/lib/events/emitter";
 import { leadVisibilityWhere } from "@/lib/scope";
-import { parseProposalItems, proposalItemsTotal } from "@/lib/proposal-items";
+import { proposalItemsTotal } from "@/lib/proposal-items";
 
 export async function createProposalAction(input: unknown) {
   const user = await requireSessionUser();

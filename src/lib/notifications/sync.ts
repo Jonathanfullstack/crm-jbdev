@@ -72,6 +72,13 @@ export async function syncDueReminders(user: SessionUser) {
   if (payload.length === 0) return;
 
   await db.notification.createMany({
-    data: payload.map(({ key: _key, ...item }) => item),
+    data: payload.map((item) => ({
+      workspaceId: item.workspaceId,
+      userId: item.userId,
+      type: item.type,
+      title: item.title,
+      body: item.body,
+      link: item.link,
+    })),
   });
 }
